@@ -27,12 +27,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pyinstaller
     
     - name: PyInstaller Action
-      # You may pin to the exact commit or the version.
-      # uses: Martin005/pyinstaller-action@dcfd75f8789130c10c0a34c3dee563e3f6906ea4
-      uses: Martin005/pyinstaller-action@v1.2.0
+      uses: JackMcKew/pyinstaller-action-windows@main
       with:
-        requirements: 'requirements.txt'
-        options: '--windowed --onefile'
+        path: ./
+    - uses: actions/upload-artifact@v4
+      with:
+        name: main
+        path: src/dist/windows
           
