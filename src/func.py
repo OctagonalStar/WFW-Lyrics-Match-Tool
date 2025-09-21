@@ -1,4 +1,3 @@
-import ui
 import os
 from PySide6.QtWidgets import QFileDialog, QApplication, QMainWindow, \
     QWidget, QPushButton, QLabel, QLineEdit, QMessageBox

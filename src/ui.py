@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QCommandLinkButton, QFon
                                QWidget, QPlainTextEdit, QDoubleSpinBox, QFileDialog)
 import sys
 import logging
-import func
+from . import func
 
 logger = logging.getLogger(__name__)
 
