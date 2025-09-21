@@ -12,22 +12,17 @@ def setup_logging():
         datefmt="%Y-%m-%d %H:%M:%S"
     )
 
-    # 获取根logger
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
-    # 创建控制台处理器
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
 
-    # 移除所有现有的处理器
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
 
-    # 添加新的处理器
     logger.addHandler(console_handler)
 
-    # 可选：创建文件处理器
     # file_handler = logging.FileHandler("app.log", encoding="utf-8")
     # file_handler.setFormatter(formatter)
     # logger.addHandler(file_handler)

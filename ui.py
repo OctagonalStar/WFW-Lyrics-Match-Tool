@@ -22,7 +22,6 @@ import re
 import func
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 class Ui_root(object):
     def __init__(self):
@@ -420,7 +419,7 @@ class Ui_root(object):
                                                                      None))
         self.pushButton_Back.setText(QCoreApplication.translate("root", u"Back 10s", None))
         self.pushButton_Pause.setText(QCoreApplication.translate("root", u"Pause", None))
-        self.pushButton_Rec.setText(QCoreApplication.translate("root", u"Recover", None))
+        self.pushButton_Rec.setText(QCoreApplication.translate("root", u"Reset", None))
         self.pushButton_Mark.setText(QCoreApplication.translate("root", u"Start Player", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Edit),
                                   QCoreApplication.translate("root", u"Edit", None))
@@ -478,18 +477,33 @@ class Ui_root(object):
             self.delay = self.DelaySetting.value()
 
         def prepare_edit():
+            logger.info("Entering Edit Page..")
             self.nowLrcIndex = 0
+            self.current_index = 0
             self.time_static = []
-            self.textBrowser_pastLyric.setText("")
             self.pushButton_Mark.setText("Start Play")
+            self.textBrowser_pastLyric.setText(" ")
             self.textBrowser_nowLyric.setText(self.lyrics[0])
             self.textBrowser_incLyric.setText(self.lyrics[1])
             self.tabWidget.setCurrentIndex(2)
+            self.player.pause()
             self.player.setPosition(0)
+            self.pushButton_Pause.setText("Pause")
+            cursor = self.textBrowser_nowLyric.textCursor()
+            cursor.select(QTextCursor.SelectionType.Document)
+            format = QTextCharFormat()
+            palette = self.textBrowser_nowLyric.palette()
+            format.setForeground(palette.color(QPalette.ColorRole.WindowText))
+            format.setBackground(palette.color(QPalette.ColorRole.Window))
+            format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
+            cursor.setCharFormat(format)
+            cursor.movePosition(QTextCursor.MoveOperation.Start)
+            cursor.clearSelection()
+            self.textBrowser_nowLyric.setTextCursor(cursor)
+
 
         def highlight_next_char():
             """高亮下一个字符"""
-
             if not self.player.isPlaying():
                 self.player.play()
                 self.pushButton_Mark.setText("Next Char (N)")
@@ -498,7 +512,6 @@ class Ui_root(object):
                 """高亮指定索引的字符"""
                 if index < 0 or index >= len(self.lyrics[self.nowLrcIndex]):
                     return
-
                 # 获取光标
                 cursor = self.textBrowser_nowLyric.textCursor()
                 if index == 0:
@@ -512,9 +525,9 @@ class Ui_root(object):
                     format.setForeground(palette.color(QPalette.ColorRole.WindowText))
                     # 设置背景色为系统默认的窗口背景颜色（透明效果）
                     format.setBackground(palette.color(QPalette.ColorRole.Window))
+                    format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
                     # 应用默认格式
                     cursor.setCharFormat(format)
-
                     # 清除选择
                     cursor.clearSelection()
                     self.textBrowser_nowLyric.setTextCursor(cursor)
@@ -525,7 +538,7 @@ class Ui_root(object):
                     prev_format = QTextCharFormat()
                     prev_format.setBackground(QColor("white"))  # 去除背景色
                     prev_format.setForeground(QColor("green"))  # 前景色变绿
-
+                    prev_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
                     cursor.setPosition(index - 1, QTextCursor.MoveMode.MoveAnchor)
                     cursor.setPosition(index, QTextCursor.MoveMode.KeepAnchor)
                     cursor.setCharFormat(prev_format)
@@ -534,7 +547,7 @@ class Ui_root(object):
                 current_format = QTextCharFormat()
                 current_format.setBackground(QColor("yellow"))
                 current_format.setForeground(QColor("red"))
-
+                current_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
                 cursor.setPosition(index, QTextCursor.MoveMode.MoveAnchor)
                 cursor.setPosition(index + 1, QTextCursor.MoveMode.KeepAnchor)
                 cursor.setCharFormat(current_format)
@@ -546,8 +559,8 @@ class Ui_root(object):
 
 
             self.current_index += 1
-            logger.info(f"Current index: {self.current_index}")
-            logger.info(f"Current position: {self.player.position()}")
+            logger.debug(f"Current index: {self.current_index}")
+            logger.debug(f"Current position: {self.player.position()}")
             self.time_static.append(self.player.position())
             if self.current_index >= len(self.lyrics[self.nowLrcIndex]):
                 self.nowLrcIndex += 1
@@ -623,6 +636,22 @@ class Ui_root(object):
             change_font(self.textBrowser_pastLyric, self.fontComboBox.currentFont())
             change_font(self.textBrowser_incLyric, self.fontComboBox.currentFont())
 
+        def back_10s():
+            logger.info(f"User Back 10s from {str(self.player.position())} to {self.player.position() - 10000}")
+            self.player.setPosition(self.player.position() - 10000)
+
+        def pause():
+            if self.player.isPlaying():
+                self.player.pause()
+                self.pushButton_Pause.setText("Play")
+            else:
+                self.player.play()
+                self.pushButton_Pause.setText("Pause")
+
+        def rec():
+            logger.info("Reset every change")
+            prepare_edit()
+
         self.actionOpen_a_LRC_File.setShortcut(u"Ctrl+O")
         self.actionExit.triggered.connect(root.close)
         self.pushButton_openFile.clicked.connect(choose_file)
@@ -638,7 +667,9 @@ class Ui_root(object):
         self.DelaySetting.valueChanged.connect(update_delay)
         self.commandLinkButton_2.clicked.connect(prepare_edit)
         self.pushButton_Mark.clicked.connect(highlight_next_char)
-        self.pushButton_Pause.clicked.connect(self.player.pause)
+        self.pushButton_Pause.clicked.connect(pause)
+        self.pushButton_Back.clicked.connect(back_10s)
+        self.pushButton_Rec.clicked.connect(rec)
         self.ani_connect=self.player.positionChanged.connect(update_position)
         self.pushButton_Mark.setShortcut(u"n")
 
