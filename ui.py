@@ -36,7 +36,6 @@ class Ui_root(object):
         self.audio_path = ""
         self.playback_rate = 1.0
         self.time_static = []
-        self.u3d = False
 
     def setupUi(self, root):
         if not root.objectName():
@@ -567,7 +566,7 @@ class Ui_root(object):
                 self.textBrowser_pastLyric.setText(self.lyrics[self.nowLrcIndex - 1])
                 if self.nowLrcIndex == len(self.lyrics):
                     func.messaagebox(root, "Finished", "All done. Click OK to start lrc generate.")
-                    outcome = func.generate_lrc(self.time_static, self.lyrics, self.delay)
+                    outcome = func.generate_lrc(self.time_static, self.lyrics, self.delay, self.checkBox_3d.isChecked())
                     self.LRCBrowser.setPlainText(outcome)
                     self.tabWidget.setCurrentIndex(0)
                     return
@@ -599,10 +598,6 @@ class Ui_root(object):
                 with open(save_path, "w", encoding="utf-8") as f:
                     f.write(temp)
                 func.messaagebox(root, "Success", "File saved successfully.")
-
-        def update_3d():
-            logger.info("Selected Using 3 decimal places")
-            self.u3d = self.checkBox_3d.isChecked()
 
         def update_animation():
             if self.checkBox_no_animation.isChecked():
@@ -660,7 +655,6 @@ class Ui_root(object):
         self.commandLinkButton_1.clicked.connect(next_step_01)
         self.pushButton_upon.clicked.connect(update_lyrics)
         self.pushButton_choose_audio.clicked.connect(choose_audio)
-        self.checkBox_3d.stateChanged.connect(update_3d)
         self.checkBox_no_animation.stateChanged.connect(update_animation)
         self.fontComboBox.currentFontChanged.connect(update_font)
         self.doubleSpinBox_speed.valueChanged.connect(update_playback_rate)

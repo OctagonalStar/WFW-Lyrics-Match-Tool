@@ -31,7 +31,7 @@ def messaagebox(root, title, message):
     """
     QMessageBox.information(root, title, message)
 
-def generate_lrc(time_static: list[int], lyrics: list[str], delay: int):
+def generate_lrc(time_static: list[int], lyrics: list[str], delay: int, u3d: bool =  False):
     temp = ""
     for x in lyrics:
         temp += x
@@ -42,7 +42,9 @@ def generate_lrc(time_static: list[int], lyrics: list[str], delay: int):
         x += delay
         if x < 0:
             x = 0
-        stime.append("[%s:%s.%s]" % (str(int(x//60000)).zfill(2), str(int(x%60000//1000)).zfill(2), str(int(x%1000//10)).zfill(2)))
+        stime.append("[%s:%s.%s]" % (str(int(x//60000)).zfill(2),
+                                     str(int(x%60000//1000)).zfill(2),
+                                     str(int(x%1000//10)).zfill(2) if not u3d else str(int(x%1000)).zfill(3)))
     for i in range(len(stime)):
         ans += stime[i] + temp[i]
     return ans
