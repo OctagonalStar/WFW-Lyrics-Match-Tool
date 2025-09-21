@@ -1,0 +1,38 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Build Python application
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - name: PyInstaller Action
+      # You may pin to the exact commit or the version.
+      # uses: Martin005/pyinstaller-action@dcfd75f8789130c10c0a34c3dee563e3f6906ea4
+      uses: Martin005/pyinstaller-action@v1.2.0
+      with:
+        requirements: 'requirements.txt'
+        options: '--windowed --onefile'
+          
