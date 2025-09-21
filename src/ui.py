@@ -1,14 +1,8 @@
 import os
-from typing import Any
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-                           QCursor, QFont, QFontDatabase, QGradient,
-                           QIcon, QImage, QKeySequence, QLinearGradient,
-                           QPainter, QPalette, QPixmap, QRadialGradient,
-                           QTransform, QTextCharFormat, QTextCursor)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
+                            QSize, QUrl, Qt)
+from PySide6.QtGui import (QAction, QColor, QCursor, QFont, QPalette, QTextCharFormat, QTextCursor)
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PySide6.QtWidgets import (QApplication, QCheckBox, QCommandLinkButton, QFontComboBox,
                                QGridLayout, QHBoxLayout, QLCDNumber, QLabel,
@@ -18,7 +12,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QCommandLinkButton, QFon
                                QWidget, QPlainTextEdit, QDoubleSpinBox, QFileDialog)
 import sys
 import logging
-import re
 import func
 
 logger = logging.getLogger(__name__)

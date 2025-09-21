@@ -1,7 +1,5 @@
-import ui
-import func
+from src import ui
 import sys
-import time
 import logging
 
 
