@@ -15,7 +15,7 @@ permissions:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -28,13 +28,11 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install pyinstaller
-    
     - name: PyInstaller Action
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: src
+      run: |
+        pyinstaller --onefile --windowed main.py
     - uses: actions/upload-artifact@v4
       with:
         name: main
-        path: dist/windows
+        path: dist
           
