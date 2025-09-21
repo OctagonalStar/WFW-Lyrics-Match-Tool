@@ -1,4 +1,4 @@
-from src import ui
+import ui
 import sys
 import logging
 
