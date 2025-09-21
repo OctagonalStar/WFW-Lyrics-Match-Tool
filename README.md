@@ -1,4 +1,7 @@
 # Word For Word Lyrics Match Tool
+
+[![Build Python application](https://github.com/OctagonalStar/WFW-Lyrics-Match-Tool/actions/workflows/python-app.yml/badge.svg)](https://github.com/OctagonalStar/WFW-Lyrics-Match-Tool/actions/workflows/python-app.yml)
+
 This tool is designed to help you with the matching of word for word lyrics.
 
 For example, if you have a song with the lyrics but no timestamp, 
