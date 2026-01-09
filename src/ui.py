@@ -658,7 +658,6 @@ class Ui_root(object):
         self.pushButton_Back.clicked.connect(back_10s)
         self.pushButton_Rec.clicked.connect(rec)
         self.ani_connect=self.player.positionChanged.connect(update_position)
-        self.pushButton_Mark.setShortcut(u"n")
 
 
 if __name__ == "__main__":
