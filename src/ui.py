@@ -370,8 +370,8 @@ class UiRoot(object):
         self.pushButton_Rec.setText(QCoreApplication.translate("root", u"Recover", None))
         self.pushButton_Mark.setText(QCoreApplication.translate("root", u"Start Player", None))
         self.label_showSave.setText(QCoreApplication.translate("root", u"LastSave: None", None))
-        self.pushButton_qSave.setText(QCoreApplication.translate("root", u"Quick Save", None))
-        self.pushButton_qLoad.setText(QCoreApplication.translate("root", u"Quick Load", None))
+        self.pushButton_qSave.setText(QCoreApplication.translate("root", u"Quick Save (Ctrl+S)", None))
+        self.pushButton_qLoad.setText(QCoreApplication.translate("root", u"Quick Load (Ctrl+L)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Edit),
                                   QCoreApplication.translate("root", u"Edit", None))
         self.menuEdit.setTitle(QCoreApplication.translate("root", u"Edit", None))
@@ -494,7 +494,7 @@ class UiRoot(object):
             """高亮下一个字符"""
             if not self.player.isPlaying():
                 self.player.play()
-                self.pushButton_Mark.setText("Next Char")
+                self.pushButton_Mark.setText("Next Char (N)")
                 return
 
             self.current_word_index += 1
