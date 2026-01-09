@@ -29,9 +29,8 @@ if __name__ == "__main__":
     setup_logging()
     logger = logging.getLogger(__name__)
     app = ui.QApplication(sys.argv)
-    gui = ui.Ui_root()
     root = ui.QMainWindow()
-    gui.setupUi(root)
+    gui = ui.UiRoot(root)
     root.show()
     sys.exit(logger.info("Normally Exiting...") if app.exec() == 0 else logger.error("An Exception Happened Exiting..."))
 

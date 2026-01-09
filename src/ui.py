@@ -2,7 +2,8 @@ import os
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
                             QSize, QUrl, Qt)
-from PySide6.QtGui import (QAction, QColor, QCursor, QFont, QPalette, QTextCharFormat, QTextCursor)
+from PySide6.QtGui import (QAction, QColor, QCursor, QFont, QPalette, QTextCharFormat, QTextCursor, QShortcut,
+                           QKeySequence)
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PySide6.QtWidgets import (QApplication, QCheckBox, QCommandLinkButton, QFontComboBox,
                                QGridLayout, QHBoxLayout, QLCDNumber, QLabel,
@@ -16,8 +17,8 @@ import func
 
 logger = logging.getLogger(__name__)
 
-class Ui_root(object):
-    def __init__(self):
+class UiRoot(object):
+    def __init__(self, root_window):
         self.ani_connect = None
         self.file_path = ""
         self.lyrics = []
@@ -33,24 +34,27 @@ class Ui_root(object):
         self.qsave_line_index = 0
         self.qsave_word_index = 0
 
-    def setupUi(self, root):
-        if not root.objectName():
-            root.setObjectName(u"root")
-        root.resize(800, 600)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(root.sizePolicy().hasHeightForWidth())
-        root.setSizePolicy(sizePolicy)
-        root.setMinimumSize(QSize(800, 600))
-        root.setMaximumSize(QSize(800, 600))
-        self.actionOpen_a_LRC_File = QAction(root)
+        self.mark_shortcut = QShortcut(QKeySequence(u"N"), root_window, enabled=False)
+        self.qload_shortcut = QShortcut(QKeySequence(u"Ctrl+L"), root_window, enabled=False)
+        self.qsave_shortcut = QShortcut(QKeySequence(u"Ctrl+S"), root_window, enabled=False)
+        # setupUi
+        if not root_window.objectName():
+            root_window.setObjectName(u"root")
+        root_window.resize(800, 600)
+        size_policy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(root_window.sizePolicy().hasHeightForWidth())
+        root_window.setSizePolicy(size_policy)
+        root_window.setMinimumSize(QSize(800, 600))
+        root_window.setMaximumSize(QSize(800, 600))
+        self.actionOpen_a_LRC_File = QAction(root_window)
         self.actionOpen_a_LRC_File.setObjectName(u"actionOpen_a_LRC_File")
-        self.actionExit = QAction(root)
+        self.actionExit = QAction(root_window)
         self.actionExit.setObjectName(u"actionExit")
-        self.actionth_is_app = QAction(root)
-        self.actionth_is_app.setObjectName(u"actionth_is_app")
-        self.centralwidget = QWidget(root)
+        self.this_app_action = QAction(root_window)
+        self.this_app_action.setObjectName(u"this_app_action")
+        self.centralwidget = QWidget(root_window)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayoutWidget = QWidget(self.centralwidget)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
@@ -68,11 +72,11 @@ class Ui_root(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.tabWidget = QTabWidget(self.verticalLayoutWidget)
         self.tabWidget.setObjectName(u"tabWidget")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(80)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy1)
+        size_policy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
+        size_policy1.setHorizontalStretch(80)
+        size_policy1.setVerticalStretch(0)
+        size_policy1.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
+        self.tabWidget.setSizePolicy(size_policy1)
         self.tabWidget.setMinimumSize(QSize(800, 500))
         self.tabWidget.setBaseSize(QSize(800, 700))
         self.tabWidget.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
@@ -81,11 +85,11 @@ class Ui_root(object):
         self.LRCBrowser = QPlainTextEdit(self.OverView)
         self.LRCBrowser.setObjectName(u"LRCBrowser")
         self.LRCBrowser.setGeometry(QRect(0, 0, 790, 430))
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.LRCBrowser.sizePolicy().hasHeightForWidth())
-        self.LRCBrowser.setSizePolicy(sizePolicy2)
+        size_policy2 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        size_policy2.setHorizontalStretch(0)
+        size_policy2.setVerticalStretch(0)
+        size_policy2.setHeightForWidth(self.LRCBrowser.sizePolicy().hasHeightForWidth())
+        self.LRCBrowser.setSizePolicy(size_policy2)
         self.LRCBrowser.viewport().setProperty(u"cursor", QCursor(Qt.CursorShape.IBeamCursor))
         self.horizontalLayoutWidget = QWidget(self.OverView)
         self.horizontalLayoutWidget.setObjectName(u"horizontalLayoutWidget")
@@ -136,10 +140,10 @@ class Ui_root(object):
         self.checkBox_3d.setMinimumSize(QSize(0, 30))
         self.checkBox_3d.setTristate(False)
         self.gridLayout_setting.addWidget(self.checkBox_3d, 1, 0, 1, 1)
-        self.checkBox_no_anitamtion = QCheckBox(self.gridLayoutWidget)
-        self.checkBox_no_anitamtion.setObjectName(u"checkBox_no_anitamtion")
-        self.checkBox_no_anitamtion.setMinimumSize(QSize(0, 30))
-        self.gridLayout_setting.addWidget(self.checkBox_no_anitamtion, 1, 1, 1, 1)
+        self.checkBox_no_animation = QCheckBox(self.gridLayoutWidget)
+        self.checkBox_no_animation.setObjectName(u"checkBox_no_animation")
+        self.checkBox_no_animation.setMinimumSize(QSize(0, 30))
+        self.gridLayout_setting.addWidget(self.checkBox_no_animation, 1, 1, 1, 1)
         self.verticalLayout_font = QVBoxLayout()
         self.verticalLayout_font.setObjectName(u"verticalLayout_font")
         self.labelFont = QLabel(self.gridLayoutWidget)
@@ -201,7 +205,6 @@ class Ui_root(object):
         font1 = QFont()
         font1.setPointSize(44)
         font1.setBold(True)
-        font1.setStyleStrategy(QFont.PreferAntialias)
         self.textBrowser_nowLyric.setFont(font1)
         self.textBrowser_nowLyric.setAutoFillBackground(False)
         self.verticalLayout_4.addWidget(self.textBrowser_nowLyric)
@@ -263,53 +266,53 @@ class Ui_root(object):
         self.horizontalLayout_3.addWidget(self.label_showSave)
         self.pushButton_qSave = QPushButton(self.gridLayoutWidget_2)
         self.pushButton_qSave.setObjectName(u"pushButton_qSave")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.pushButton_qSave.sizePolicy().hasHeightForWidth())
-        self.pushButton_qSave.setSizePolicy(sizePolicy3)
+        size_policy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        size_policy3.setHorizontalStretch(0)
+        size_policy3.setVerticalStretch(0)
+        size_policy3.setHeightForWidth(self.pushButton_qSave.sizePolicy().hasHeightForWidth())
+        self.pushButton_qSave.setSizePolicy(size_policy3)
         self.horizontalLayout_3.addWidget(self.pushButton_qSave)
         self.pushButton_qLoad = QPushButton(self.gridLayoutWidget_2)
         self.pushButton_qLoad.setObjectName(u"pushButton_qLoad")
-        sizePolicy3.setHeightForWidth(self.pushButton_qLoad.sizePolicy().hasHeightForWidth())
-        self.pushButton_qLoad.setSizePolicy(sizePolicy3)
+        size_policy3.setHeightForWidth(self.pushButton_qLoad.sizePolicy().hasHeightForWidth())
+        self.pushButton_qLoad.setSizePolicy(size_policy3)
         self.horizontalLayout_3.addWidget(self.pushButton_qLoad)
         self.gridLayout_2.addLayout(self.horizontalLayout_3, 5, 0, 1, 1)
         self.tabWidget.addTab(self.Edit, "")
         self.verticalLayout.addWidget(self.tabWidget)
-        root.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(root)
+        root_window.setCentralWidget(self.centralwidget)
+        self.menubar = QMenuBar(root_window)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 800, 33))
         self.menuEdit = QMenu(self.menubar)
         self.menuEdit.setObjectName(u"menuEdit")
         self.menuAbout = QMenu(self.menubar)
         self.menuAbout.setObjectName(u"menuAbout")
-        root.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(root)
+        root_window.setMenuBar(self.menubar)
+        self.statusbar = QStatusBar(root_window)
         self.statusbar.setObjectName(u"statusbar")
-        root.setStatusBar(self.statusbar)
+        root_window.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
         self.menuEdit.addAction(self.actionOpen_a_LRC_File)
         self.menuEdit.addAction(self.actionExit)
-        self.menuAbout.addAction(self.actionth_is_app)
+        self.menuAbout.addAction(self.this_app_action)
 
         self.player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.player.setAudioOutput(self.audio_output)
-        self.blind_func(root)
+        self.blind_func(root_window)
 
-        self.retranslateUi(root)
+        self.retranslate_ui(root_window)
         self.tabWidget.setCurrentIndex(0)
-        QMetaObject.connectSlotsByName(root)
+        QMetaObject.connectSlotsByName(root_window)
     # setupUi
-    def retranslateUi(self, root):
-        root.setWindowTitle(QCoreApplication.translate("root", u"Word-for-word lyrics matching tool", None))
+    def retranslate_ui(self, root_window):
+        root_window.setWindowTitle(QCoreApplication.translate("root", u"Word-for-word lyrics matching tool", None))
         self.actionOpen_a_LRC_File.setText(QCoreApplication.translate("root", u"Open a LRC File", None))
         self.actionExit.setText(QCoreApplication.translate("root", u"Exit", None))
-        self.actionth_is_app.setText(QCoreApplication.translate("root", u"this app", None))
+        self.this_app_action.setText(QCoreApplication.translate("root", u"this app", None))
         self.labelPath.setText(QCoreApplication.translate("root", u"File Path:", None))
         self.pushButton_openFile.setText(QCoreApplication.translate("root", u"Open a lrc/txt for Lyrics", None))
         self.pushButton_upon.setText(QCoreApplication.translate("root", u"Use the Lyrics upon", None))
@@ -321,7 +324,7 @@ class Ui_root(object):
         self.checkBox_3d.setText(
             QCoreApplication.translate("root", u"Using three decimal places (maybe incompatible with some app)",
                                        None))
-        self.checkBox_no_anitamtion.setText(
+        self.checkBox_no_animation.setText(
             QCoreApplication.translate("root", u"No More Animation(For devices with poor performance)", None))
         self.labelFont.setText(QCoreApplication.translate("root", u"Font Setting", None))
         self.label_choose_audio.setText(
@@ -375,9 +378,9 @@ class Ui_root(object):
         self.menuAbout.setTitle(QCoreApplication.translate("root", u"About", None))
     # retranslateUi
 
-    def blind_func(self, root):
+    def blind_func(self, root_window):
         def choose_file():
-            file_path = func.choose_file(root, "Choose the original Lyrics", "LyricsFile (*.lrc *.txt)")
+            file_path = func.choose_file(root_window, "Choose the original Lyrics", "LyricsFile (*.lrc *.txt)")
             if file_path and func.os.path.exists(file_path):
                 self.file_path = file_path
                 logger.info(f"File path: {file_path}")
@@ -402,10 +405,10 @@ class Ui_root(object):
             if self.lyrics:
                 self.tabWidget.setCurrentIndex(1)
             else:
-                func.messaagebox(root, "Error", "Please choose a LRC file or set your own Lyrics.")
+                func.messaagebox(root_window, "Error", "Please choose a LRC file or set your own Lyrics.")
 
         def choose_audio():
-            file_path = func.choose_file(root, "Choose the audio file", "AudioFile (*.mp3 *.wav *.flac)")
+            file_path = func.choose_file(root_window, "Choose the audio file", "AudioFile (*.mp3 *.wav *.flac)")
             if file_path and func.os.path.exists(file_path):
                 self.audio_path = file_path
                 self.player.setSource(QUrl.fromLocalFile(file_path))
@@ -434,15 +437,18 @@ class Ui_root(object):
             self.pushButton_Pause.setText("Pause")
             cursor = self.textBrowser_nowLyric.textCursor()
             cursor.select(QTextCursor.SelectionType.Document)
-            format = QTextCharFormat()
+            unselected_format = QTextCharFormat()
             palette = self.textBrowser_nowLyric.palette()
-            format.setForeground(palette.color(QPalette.ColorRole.WindowText))
-            format.setBackground(palette.color(QPalette.ColorRole.Window))
-            format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
-            cursor.setCharFormat(format)
+            unselected_format.setForeground(palette.color(QPalette.ColorRole.WindowText))
+            unselected_format.setBackground(palette.color(QPalette.ColorRole.Window))
+            unselected_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
+            cursor.setCharFormat(unselected_format)
             cursor.movePosition(QTextCursor.MoveOperation.Start)
             cursor.clearSelection()
             self.textBrowser_nowLyric.setTextCursor(cursor)
+            self.mark_shortcut.setEnabled(True)
+            self.qload_shortcut.setEnabled(True)
+            self.qsave_shortcut.setEnabled(True)
 
         def highlight_char(index):
             """高亮指定索引的字符"""
@@ -454,12 +460,12 @@ class Ui_root(object):
                 cursor = self.textBrowser_nowLyric.textCursor()
                 # 选择所有文本
                 cursor.select(QTextCursor.SelectionType.Document)
-                format = QTextCharFormat()
+                unselected_format = QTextCharFormat()
                 palette = self.textBrowser_nowLyric.palette()
-                format.setForeground(palette.color(QPalette.ColorRole.WindowText))
-                format.setBackground(palette.color(QPalette.ColorRole.Window))
-                format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
-                cursor.setCharFormat(format)
+                unselected_format.setForeground(palette.color(QPalette.ColorRole.WindowText))
+                unselected_format.setBackground(palette.color(QPalette.ColorRole.Window))
+                unselected_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
+                cursor.setCharFormat(unselected_format)
                 cursor.clearSelection()
                 self.textBrowser_nowLyric.setTextCursor(cursor)
 
@@ -481,7 +487,6 @@ class Ui_root(object):
             cursor.setPosition(index + 1, QTextCursor.MoveMode.KeepAnchor)
             cursor.setCharFormat(current_format)
             cursor.clearSelection()
-
             cursor.setPosition(index + 1)
             self.textBrowser_nowLyric.setTextCursor(cursor)
 
@@ -506,7 +511,7 @@ class Ui_root(object):
         def update_text_box():
             self.textBrowser_pastLyric.setText(self.lyrics[self.current_line_index - 1])
             if self.current_line_index == len(self.lyrics):
-                func.messaagebox(root, "Finished", "All done. Click OK to start lrc generate.")
+                func.messaagebox(root_window, "Finished", "All done. Click OK to start lrc generate.")
                 outcome = func.generate_lrc(self.time_static, self.lyrics, self.delay, self.checkBox_3d.isChecked())
                 self.LRCBrowser.setPlainText(outcome)
                 self.tabWidget.setCurrentIndex(0)
@@ -520,25 +525,25 @@ class Ui_root(object):
         def update_position():
             now = self.player.position()
             pgs = int(self.player.position() / self.player.duration() * 100)
-            min = now // 60000
+            min_value = now // 60000
             now = now % 60000
-            sec = now // 1000
-            ms = now % 1000
+            sec_value = now // 1000
+            ms_value = now % 1000
             self.progressBar.setValue(pgs)
-            self.lcdNumber_min.display(min)
-            self.lcdNumber_sec.display(sec)
-            self.lcdNumber_ms.display(ms)
+            self.lcdNumber_min.display(min_value)
+            self.lcdNumber_sec.display(sec_value)
+            self.lcdNumber_ms.display(ms_value)
 
         def save_file():
-            save_path, _ = QFileDialog.getSaveFileName(root, "Save File", os.getcwd(), "LRC File (*.lrc);;Any File (*.*)")
+            save_path, _ = QFileDialog.getSaveFileName(root_window, "Save File", os.getcwd(), "LRC File (*.lrc);;Any File (*.*)")
             if save_path:
                 temp = self.LRCBrowser.toPlainText()
                 with open(save_path, "w", encoding="utf-8") as f:
                     f.write(temp)
-                func.messaagebox(root, "Success", "File saved successfully.")
+                func.messaagebox(root_window, "Success", "File saved successfully.")
 
         def update_animation():
-            if self.checkBox_no_anitamtion.isChecked():
+            if self.checkBox_no_animation.isChecked():
                 self.player.positionChanged.disconnect(self.ani_connect)
                 self.ani_connect = None
             else:
@@ -547,7 +552,6 @@ class Ui_root(object):
         def update_font():
             def change_font(browser: QTextBrowser|QPlainTextEdit, selected_font: QFont):
                 cursor = browser.textCursor()
-                document = browser.document()
                 cursor.movePosition(QTextCursor.MoveOperation.Start)
                 while not cursor.atEnd():
                     cursor.movePosition(QTextCursor.MoveOperation.StartOfBlock)
@@ -600,20 +604,25 @@ class Ui_root(object):
             self.time_static = self.qsave_time_static.copy()
             self.current_word_index = self.qsave_word_index
             self.current_line_index = self.qsave_line_index
+            self.pushButton_Mark.setText("continue")
             update_text_box()
             highlight_char(self.current_word_index)
-            func.messaagebox(root, "Success", "Time stamps loaded successfully.")
+            func.messaagebox(root_window, "Success", "Time stamps loaded successfully.")
+
+
+        self.mark_shortcut.activated.connect(highlight_next_char)
+        self.qload_shortcut.activated.connect(qload)
+        self.qsave_shortcut.activated.connect(qsave)
 
         self.actionOpen_a_LRC_File.setShortcut(u"Ctrl+O")
-        self.pushButton_Mark.setShortcut(u"M")
-        self.actionExit.triggered.connect(root.close)
+        self.actionExit.triggered.connect(root_window.close)
         self.pushButton_openFile.clicked.connect(choose_file)
         self.pushButton_save.clicked.connect(save_file)
         self.actionOpen_a_LRC_File.triggered.connect(choose_file)
         self.commandLinkButton_1.clicked.connect(next_step_01)
         self.pushButton_upon.clicked.connect(update_lyrics)
         self.pushButton_choose_audio.clicked.connect(choose_audio)
-        self.checkBox_no_anitamtion.stateChanged.connect(update_animation)
+        self.checkBox_no_animation.stateChanged.connect(update_animation)
         self.fontComboBox.currentFontChanged.connect(update_font)
         self.doubleSpinBox_speed.valueChanged.connect(update_playback_rate)
         self.DelaySetting.valueChanged.connect(update_delay)
@@ -624,13 +633,13 @@ class Ui_root(object):
         self.pushButton_Rec.clicked.connect(rec)
         self.pushButton_qSave.clicked.connect(qsave)
         self.pushButton_qLoad.clicked.connect(qload)
+
         self.ani_connect=self.player.positionChanged.connect(update_position)
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    ui = Ui_root()
     root = QMainWindow()
-    ui.setupUi(root)
+    ui = UiRoot(root)
     root.show()
     sys.exit(app.exec())
