@@ -60,19 +60,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="labelTimePitch">
-         <property name="maximumSize">
-          <size>
-           <width>400</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Original Time Pitch:</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -99,7 +86,7 @@
         <cursorShape>ArrowCursor</cursorShape>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="OverView">
         <attribute name="title">
@@ -464,23 +451,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <x>0</x>
            <y>190</y>
            <width>791</width>
-           <height>191</height>
+           <height>271</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="3" column="0">
-           <widget class="QProgressBar" name="progressBar">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
@@ -590,6 +564,56 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <string>Start Player</string>
             </property>
            </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QProgressBar" name="progressBar">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_showSave">
+              <property name="text">
+               <string>LastSave: None</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_qSave">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Quick Save</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_qLoad">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Quick Load</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>

@@ -21,14 +21,17 @@ class Ui_root(object):
         self.ani_connect = None
         self.file_path = ""
         self.lyrics = []
-        self.isPitched = False
         self.delay = 0
-        self.time_mark = 0
-        self.nowLrcIndex = 0
-        self.current_index = 0
+        self.current_line_index = 0
+        self.current_word_index = 0
         self.audio_path = ""
         self.playback_rate = 1.0
         self.time_static = []
+
+        self.qsave_time_static = []
+        self.qsave_position = 0
+        self.qsave_line_index = 0
+        self.qsave_word_index = 0
 
     def setupUi(self, root):
         if not root.objectName():
@@ -61,17 +64,8 @@ class Ui_root(object):
         self.labelPath = QLabel(self.verticalLayoutWidget)
         self.labelPath.setObjectName(u"labelPath")
         self.labelPath.setMaximumSize(QSize(16777215, 20))
-
         self.horizontalLayout.addWidget(self.labelPath)
-
-        self.labelTimePitch = QLabel(self.verticalLayoutWidget)
-        self.labelTimePitch.setObjectName(u"labelTimePitch")
-        self.labelTimePitch.setMaximumSize(QSize(400, 20))
-
-        self.horizontalLayout.addWidget(self.labelTimePitch)
-
         self.verticalLayout.addLayout(self.horizontalLayout)
-
         self.tabWidget = QTabWidget(self.verticalLayoutWidget)
         self.tabWidget.setObjectName(u"tabWidget")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
@@ -102,26 +96,18 @@ class Ui_root(object):
         self.pushButton_openFile = QPushButton(self.horizontalLayoutWidget)
         self.pushButton_openFile.setObjectName(u"pushButton_openFile")
         self.pushButton_openFile.setMinimumSize(QSize(0, 40))
-
         self.horizontalLayout_overView_downset.addWidget(self.pushButton_openFile)
-
         self.pushButton_upon = QPushButton(self.horizontalLayoutWidget)
         self.pushButton_upon.setObjectName(u"pushButton_upon")
         self.pushButton_upon.setMinimumSize(QSize(0, 40))
-
         self.horizontalLayout_overView_downset.addWidget(self.pushButton_upon)
-
         self.pushButton_save = QPushButton(self.horizontalLayoutWidget)
         self.pushButton_save.setObjectName(u"pushButton_save")
         self.pushButton_save.setMinimumSize(QSize(0, 40))
-
         self.horizontalLayout_overView_downset.addWidget(self.pushButton_save)
-
         self.commandLinkButton_1 = QCommandLinkButton(self.horizontalLayoutWidget)
         self.commandLinkButton_1.setObjectName(u"commandLinkButton_1")
-
         self.horizontalLayout_overView_downset.addWidget(self.commandLinkButton_1)
-
         self.tabWidget.addTab(self.OverView, "")
         self.Setting = QWidget()
         self.Setting.setObjectName(u"Setting")
@@ -136,64 +122,45 @@ class Ui_root(object):
         self.labelDelay = QLabel(self.gridLayoutWidget)
         self.labelDelay.setObjectName(u"labelDelay")
         self.labelDelay.setMaximumSize(QSize(16777215, 20))
-
         self.verticalLayout_delay.addWidget(self.labelDelay)
-
         self.DelaySetting = QSpinBox(self.gridLayoutWidget)
         self.DelaySetting.setObjectName(u"DelaySetting")
         self.DelaySetting.setMinimumSize(QSize(0, 30))
         self.DelaySetting.setMinimum(-3000)
         self.DelaySetting.setMaximum(3000)
         self.DelaySetting.setValue(-300)
-
         self.verticalLayout_delay.addWidget(self.DelaySetting)
-
         self.gridLayout_setting.addLayout(self.verticalLayout_delay, 2, 1, 1, 1)
-
         self.checkBox_3d = QCheckBox(self.gridLayoutWidget)
         self.checkBox_3d.setObjectName(u"checkBox_3d")
         self.checkBox_3d.setMinimumSize(QSize(0, 30))
         self.checkBox_3d.setTristate(False)
-
         self.gridLayout_setting.addWidget(self.checkBox_3d, 1, 0, 1, 1)
-
-        self.checkBox_no_animation = QCheckBox(self.gridLayoutWidget)
-        self.checkBox_no_animation.setObjectName(u"checkBox_SaveOri")
-        self.checkBox_no_animation.setMinimumSize(QSize(0, 30))
-
-        self.gridLayout_setting.addWidget(self.checkBox_no_animation, 1, 1, 1, 1)
-
+        self.checkBox_no_anitamtion = QCheckBox(self.gridLayoutWidget)
+        self.checkBox_no_anitamtion.setObjectName(u"checkBox_no_anitamtion")
+        self.checkBox_no_anitamtion.setMinimumSize(QSize(0, 30))
+        self.gridLayout_setting.addWidget(self.checkBox_no_anitamtion, 1, 1, 1, 1)
         self.verticalLayout_font = QVBoxLayout()
         self.verticalLayout_font.setObjectName(u"verticalLayout_font")
         self.labelFont = QLabel(self.gridLayoutWidget)
         self.labelFont.setObjectName(u"labelFont")
         self.labelFont.setMaximumSize(QSize(16777215, 20))
-
         self.verticalLayout_font.addWidget(self.labelFont)
-
         self.fontComboBox = QFontComboBox(self.gridLayoutWidget)
         self.fontComboBox.setObjectName(u"fontComboBox")
         self.fontComboBox.setMinimumSize(QSize(0, 30))
-
         self.verticalLayout_font.addWidget(self.fontComboBox)
-
         self.gridLayout_setting.addLayout(self.verticalLayout_font, 2, 0, 1, 1)
-
         self.verticalLayout_audio = QVBoxLayout()
         self.verticalLayout_audio.setObjectName(u"verticalLayout_audio")
         self.label_choose_audio = QLabel(self.gridLayoutWidget)
         self.label_choose_audio.setObjectName(u"label_choose_audio")
-
         self.verticalLayout_audio.addWidget(self.label_choose_audio)
-
         self.pushButton_choose_audio = QPushButton(self.gridLayoutWidget)
         self.pushButton_choose_audio.setObjectName(u"pushButton_choose_audio")
         self.pushButton_choose_audio.setMinimumSize(QSize(0, 80))
-
         self.verticalLayout_audio.addWidget(self.pushButton_choose_audio)
-
         self.gridLayout_setting.addLayout(self.verticalLayout_audio, 0, 0, 1, 1)
-
         self.verticalLayout_speed = QVBoxLayout()
         self.verticalLayout_speed.setObjectName(u"verticalLayout_speed")
         self.label_set_speed = QLabel(self.gridLayoutWidget)
@@ -201,20 +168,15 @@ class Ui_root(object):
         self.label_set_speed.setMaximumSize(QSize(16777215, 20))
         self.label_set_speed.setAlignment(
             Qt.AlignmentFlag.AlignLeading | Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
-
         self.verticalLayout_speed.addWidget(self.label_set_speed)
-
         self.doubleSpinBox_speed = QDoubleSpinBox(self.gridLayoutWidget)
         self.doubleSpinBox_speed.setObjectName(u"doubleSpinBox_speed")
         self.doubleSpinBox_speed.setMinimumSize(QSize(0, 30))
         self.doubleSpinBox_speed.setMaximum(3.000000000000000)
         self.doubleSpinBox_speed.setSingleStep(0.100000000000000)
         self.doubleSpinBox_speed.setValue(1.000000000000000)
-
         self.verticalLayout_speed.addWidget(self.doubleSpinBox_speed)
-
         self.gridLayout_setting.addLayout(self.verticalLayout_speed, 0, 1, 1, 1)
-
         self.commandLinkButton_2 = QCommandLinkButton(self.Setting)
         self.commandLinkButton_2.setObjectName(u"commandLinkButton_2")
         self.commandLinkButton_2.setGeometry(QRect(620, 430, 172, 41))
@@ -233,9 +195,7 @@ class Ui_root(object):
         font = QFont()
         font.setPointSize(12)
         self.textBrowser_pastLyric.setFont(font)
-
         self.verticalLayout_4.addWidget(self.textBrowser_pastLyric)
-
         self.textBrowser_nowLyric = QTextBrowser(self.verticalLayoutWidget_4)
         self.textBrowser_nowLyric.setObjectName(u"textBrowser_nowLyric")
         font1 = QFont()
@@ -244,83 +204,79 @@ class Ui_root(object):
         font1.setStyleStrategy(QFont.PreferAntialias)
         self.textBrowser_nowLyric.setFont(font1)
         self.textBrowser_nowLyric.setAutoFillBackground(False)
-
         self.verticalLayout_4.addWidget(self.textBrowser_nowLyric)
-
         self.textBrowser_incLyric = QTextBrowser(self.verticalLayoutWidget_4)
         self.textBrowser_incLyric.setObjectName(u"textBrowser_incLyric")
         self.textBrowser_incLyric.setMaximumSize(QSize(16777215, 40))
         self.textBrowser_incLyric.setFont(font)
-
         self.verticalLayout_4.addWidget(self.textBrowser_incLyric)
-
         self.gridLayoutWidget_2 = QWidget(self.Edit)
         self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(0, 190, 791, 191))
+        self.gridLayoutWidget_2.setGeometry(QRect(0, 190, 791, 271))
         self.gridLayout_2 = QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.progressBar = QProgressBar(self.gridLayoutWidget_2)
-        self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setMinimumSize(QSize(0, 20))
-        self.progressBar.setValue(0)
-
-        self.gridLayout_2.addWidget(self.progressBar, 3, 0, 1, 1)
-
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.pushButton_Back = QPushButton(self.gridLayoutWidget_2)
         self.pushButton_Back.setObjectName(u"pushButton_Back")
         self.pushButton_Back.setMinimumSize(QSize(0, 60))
-
         self.horizontalLayout_2.addWidget(self.pushButton_Back)
-
         self.pushButton_Pause = QPushButton(self.gridLayoutWidget_2)
         self.pushButton_Pause.setObjectName(u"pushButton_Pause")
         self.pushButton_Pause.setMinimumSize(QSize(0, 60))
-
         self.horizontalLayout_2.addWidget(self.pushButton_Pause)
-
         self.lcdNumber_min = QLCDNumber(self.gridLayoutWidget_2)
         self.lcdNumber_min.setObjectName(u"lcdNumber_min")
         self.lcdNumber_min.setMinimumSize(QSize(0, 60))
         self.lcdNumber_min.setMaximumSize(QSize(16777215, 60))
-
         self.horizontalLayout_2.addWidget(self.lcdNumber_min)
-
         self.lcdNumber_sec = QLCDNumber(self.gridLayoutWidget_2)
         self.lcdNumber_sec.setObjectName(u"lcdNumber_sec")
         self.lcdNumber_sec.setMinimumSize(QSize(0, 60))
         self.lcdNumber_sec.setMaximumSize(QSize(16777215, 60))
-
         self.horizontalLayout_2.addWidget(self.lcdNumber_sec)
-
         self.lcdNumber_ms = QLCDNumber(self.gridLayoutWidget_2)
         self.lcdNumber_ms.setObjectName(u"lcdNumber_ms")
         self.lcdNumber_ms.setMinimumSize(QSize(0, 60))
         self.lcdNumber_ms.setMaximumSize(QSize(16777215, 60))
-
         self.horizontalLayout_2.addWidget(self.lcdNumber_ms)
-
         self.pushButton_Rec = QPushButton(self.gridLayoutWidget_2)
         self.pushButton_Rec.setObjectName(u"pushButton_Rec")
         self.pushButton_Rec.setMinimumSize(QSize(0, 60))
         self.pushButton_Rec.setMaximumSize(QSize(16777215, 60))
-
         self.horizontalLayout_2.addWidget(self.pushButton_Rec)
-
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
-
         self.pushButton_Mark = QPushButton(self.gridLayoutWidget_2)
         self.pushButton_Mark.setObjectName(u"pushButton_Mark")
         self.pushButton_Mark.setMinimumSize(QSize(0, 80))
-
         self.gridLayout_2.addWidget(self.pushButton_Mark, 4, 0, 1, 1)
-
+        self.progressBar = QProgressBar(self.gridLayoutWidget_2)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setMinimumSize(QSize(0, 20))
+        self.progressBar.setValue(0)
+        self.gridLayout_2.addWidget(self.progressBar, 3, 0, 1, 1)
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_showSave = QLabel(self.gridLayoutWidget_2)
+        self.label_showSave.setObjectName(u"label_showSave")
+        self.horizontalLayout_3.addWidget(self.label_showSave)
+        self.pushButton_qSave = QPushButton(self.gridLayoutWidget_2)
+        self.pushButton_qSave.setObjectName(u"pushButton_qSave")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.pushButton_qSave.sizePolicy().hasHeightForWidth())
+        self.pushButton_qSave.setSizePolicy(sizePolicy3)
+        self.horizontalLayout_3.addWidget(self.pushButton_qSave)
+        self.pushButton_qLoad = QPushButton(self.gridLayoutWidget_2)
+        self.pushButton_qLoad.setObjectName(u"pushButton_qLoad")
+        sizePolicy3.setHeightForWidth(self.pushButton_qLoad.sizePolicy().hasHeightForWidth())
+        self.pushButton_qLoad.setSizePolicy(sizePolicy3)
+        self.horizontalLayout_3.addWidget(self.pushButton_qLoad)
+        self.gridLayout_2.addLayout(self.horizontalLayout_3, 5, 0, 1, 1)
         self.tabWidget.addTab(self.Edit, "")
-
         self.verticalLayout.addWidget(self.tabWidget)
-
         root.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(root)
         self.menubar.setObjectName(u"menubar")
@@ -343,21 +299,18 @@ class Ui_root(object):
         self.player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.player.setAudioOutput(self.audio_output)
+        self.blind_func(root)
 
         self.retranslateUi(root)
-        self.blind_func(root)  # 绑定函数
         self.tabWidget.setCurrentIndex(0)
-
         QMetaObject.connectSlotsByName(root)
-
-
+    # setupUi
     def retranslateUi(self, root):
         root.setWindowTitle(QCoreApplication.translate("root", u"Word-for-word lyrics matching tool", None))
         self.actionOpen_a_LRC_File.setText(QCoreApplication.translate("root", u"Open a LRC File", None))
         self.actionExit.setText(QCoreApplication.translate("root", u"Exit", None))
         self.actionth_is_app.setText(QCoreApplication.translate("root", u"this app", None))
         self.labelPath.setText(QCoreApplication.translate("root", u"File Path:", None))
-        self.labelTimePitch.setText(QCoreApplication.translate("root", u"Original Time Pitch:", None))
         self.pushButton_openFile.setText(QCoreApplication.translate("root", u"Open a lrc/txt for Lyrics", None))
         self.pushButton_upon.setText(QCoreApplication.translate("root", u"Use the Lyrics upon", None))
         self.pushButton_save.setText(QCoreApplication.translate("root", u"Save current Lyrics", None))
@@ -368,7 +321,7 @@ class Ui_root(object):
         self.checkBox_3d.setText(
             QCoreApplication.translate("root", u"Using three decimal places (maybe incompatible with some app)",
                                        None))
-        self.checkBox_no_animation.setText(
+        self.checkBox_no_anitamtion.setText(
             QCoreApplication.translate("root", u"No More Animation(For devices with poor performance)", None))
         self.labelFont.setText(QCoreApplication.translate("root", u"Font Setting", None))
         self.label_choose_audio.setText(
@@ -411,14 +364,16 @@ class Ui_root(object):
                                                                      None))
         self.pushButton_Back.setText(QCoreApplication.translate("root", u"Back 10s", None))
         self.pushButton_Pause.setText(QCoreApplication.translate("root", u"Pause", None))
-        self.pushButton_Rec.setText(QCoreApplication.translate("root", u"Reset", None))
+        self.pushButton_Rec.setText(QCoreApplication.translate("root", u"Recover", None))
         self.pushButton_Mark.setText(QCoreApplication.translate("root", u"Start Player", None))
+        self.label_showSave.setText(QCoreApplication.translate("root", u"LastSave: None", None))
+        self.pushButton_qSave.setText(QCoreApplication.translate("root", u"Quick Save", None))
+        self.pushButton_qLoad.setText(QCoreApplication.translate("root", u"Quick Load", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Edit),
                                   QCoreApplication.translate("root", u"Edit", None))
         self.menuEdit.setTitle(QCoreApplication.translate("root", u"Edit", None))
         self.menuAbout.setTitle(QCoreApplication.translate("root", u"About", None))
-        # retranslateUi
-
+    # retranslateUi
 
     def blind_func(self, root):
         def choose_file():
@@ -432,7 +387,6 @@ class Ui_root(object):
                     logger.info(f"Loaded Lyrics: {self.lyrics[0]}")
                 if "[" in self.lyrics[0] and "]" in self.lyrics[0]:
                     self.isPitched =  True
-                self.labelTimePitch.setText("Original Time Pitch: " + ("True" if self.isPitched else "False"))
                 temp = ""
                 for x in self.lyrics:
                     temp += x
@@ -443,9 +397,6 @@ class Ui_root(object):
             for i in range(len(self.lyrics)):
                 self.lyrics[i] = self.lyrics[i] + "\n"
             self.labelPath.setText("File Path: None(From the temporary input texts)")
-            if "[" in self.lyrics[0] and "]" in self.lyrics[0]:
-                self.isPitched = True
-            self.labelTimePitch.setText("Original Time Pitch: " + ("True" if self.isPitched else "False"))
 
         def next_step_01():
             if self.lyrics:
@@ -470,8 +421,8 @@ class Ui_root(object):
 
         def prepare_edit():
             logger.info("Entering Edit Page..")
-            self.nowLrcIndex = 0
-            self.current_index = 0
+            self.current_line_index = 0
+            self.current_word_index = 0
             self.time_static = []
             self.pushButton_Mark.setText("Start Play")
             self.textBrowser_pastLyric.setText(" ")
@@ -493,84 +444,78 @@ class Ui_root(object):
             cursor.clearSelection()
             self.textBrowser_nowLyric.setTextCursor(cursor)
 
+        def highlight_char(index):
+            """高亮指定索引的字符"""
+            if index < 0 or index >= len(self.lyrics[self.current_line_index]):
+                return
+            cursor = self.textBrowser_nowLyric.textCursor()
+
+            if cursor.position() == 0:
+                cursor = self.textBrowser_nowLyric.textCursor()
+                # 选择所有文本
+                cursor.select(QTextCursor.SelectionType.Document)
+                format = QTextCharFormat()
+                palette = self.textBrowser_nowLyric.palette()
+                format.setForeground(palette.color(QPalette.ColorRole.WindowText))
+                format.setBackground(palette.color(QPalette.ColorRole.Window))
+                format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
+                cursor.setCharFormat(format)
+                cursor.clearSelection()
+                self.textBrowser_nowLyric.setTextCursor(cursor)
+
+            if index > 0:
+                prev_format = QTextCharFormat()
+                prev_format.setBackground(QColor("white"))
+                prev_format.setForeground(QColor("green"))
+                prev_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
+                cursor.setPosition(0, QTextCursor.MoveMode.MoveAnchor)
+                cursor.setPosition(index, QTextCursor.MoveMode.KeepAnchor)
+                cursor.setCharFormat(prev_format)
+
+            # 设置当前字符的格式：背景色变黄，前景色变红
+            current_format = QTextCharFormat()
+            current_format.setBackground(QColor("yellow"))
+            current_format.setForeground(QColor("red"))
+            current_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
+            cursor.setPosition(index, QTextCursor.MoveMode.MoveAnchor)
+            cursor.setPosition(index + 1, QTextCursor.MoveMode.KeepAnchor)
+            cursor.setCharFormat(current_format)
+            cursor.clearSelection()
+
+            cursor.setPosition(index + 1)
+            self.textBrowser_nowLyric.setTextCursor(cursor)
 
         def highlight_next_char():
             """高亮下一个字符"""
             if not self.player.isPlaying():
                 self.player.play()
-                self.pushButton_Mark.setText("Next Char (N)")
+                self.pushButton_Mark.setText("Next Char")
                 return
-            def highlight_char(index):
-                """高亮指定索引的字符"""
-                if index < 0 or index >= len(self.lyrics[self.nowLrcIndex]):
-                    return
-                # 获取光标
-                cursor = self.textBrowser_nowLyric.textCursor()
-                if index == 0:
-                    cursor = self.textBrowser_nowLyric.textCursor()
-                    # 选择所有文本
-                    cursor.select(QTextCursor.SelectionType.Document)
-                    format = QTextCharFormat()
-                    # 使用系统调色盘的默认文本和背景颜色
-                    palette = self.textBrowser_nowLyric.palette()
-                    # 设置前景色（文本颜色）为系统默认的窗口文本颜色
-                    format.setForeground(palette.color(QPalette.ColorRole.WindowText))
-                    # 设置背景色为系统默认的窗口背景颜色（透明效果）
-                    format.setBackground(palette.color(QPalette.ColorRole.Window))
-                    format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
-                    # 应用默认格式
-                    cursor.setCharFormat(format)
-                    # 清除选择
-                    cursor.clearSelection()
-                    self.textBrowser_nowLyric.setTextCursor(cursor)
-                # 首先重置所有文本的格式为默认（可选，这里我们选择逐个处理）
-                # 创建用于恢复之前字符的格式
-                if index > 0:
-                    # 重置前一个字符的格式：去除背景色，前景色变绿
-                    prev_format = QTextCharFormat()
-                    prev_format.setBackground(QColor("white"))  # 去除背景色
-                    prev_format.setForeground(QColor("green"))  # 前景色变绿
-                    prev_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
-                    cursor.setPosition(index - 1, QTextCursor.MoveMode.MoveAnchor)
-                    cursor.setPosition(index, QTextCursor.MoveMode.KeepAnchor)
-                    cursor.setCharFormat(prev_format)
 
-                # 设置当前字符的格式：背景色变黄，前景色变红
-                current_format = QTextCharFormat()
-                current_format.setBackground(QColor("yellow"))
-                current_format.setForeground(QColor("red"))
-                current_format.setFont(QFont(self.fontComboBox.currentFont().families(), 40, QFont.Weight.Bold))
-                cursor.setPosition(index, QTextCursor.MoveMode.MoveAnchor)
-                cursor.setPosition(index + 1, QTextCursor.MoveMode.KeepAnchor)
-                cursor.setCharFormat(current_format)
-
-                # 移动光标以便看到效果（可选）
-                cursor.clearSelection()
-                cursor.setPosition(index + 1)
-                self.textBrowser_nowLyric.setTextCursor(cursor)
-
-
-            self.current_index += 1
-            logger.debug(f"Current index: {self.current_index}")
+            self.current_word_index += 1
+            logger.debug(f"Current index: {self.current_word_index}")
             logger.debug(f"Current position: {self.player.position()}")
             self.time_static.append(self.player.position())
-            if self.current_index >= len(self.lyrics[self.nowLrcIndex]):
-                self.nowLrcIndex += 1
-                self.textBrowser_pastLyric.setText(self.lyrics[self.nowLrcIndex - 1])
-                if self.nowLrcIndex == len(self.lyrics):
-                    func.messaagebox(root, "Finished", "All done. Click OK to start lrc generate.")
-                    outcome = func.generate_lrc(self.time_static, self.lyrics, self.delay, self.checkBox_3d.isChecked())
-                    self.LRCBrowser.setPlainText(outcome)
-                    self.tabWidget.setCurrentIndex(0)
-                    return
-                self.textBrowser_nowLyric.setText(self.lyrics[self.nowLrcIndex])
-                if self.nowLrcIndex >= len(self.lyrics) - 1:
-                    self.textBrowser_incLyric.setText("")
-                else:
-                    self.textBrowser_incLyric.setText(self.lyrics[self.nowLrcIndex + 1])
-                self.current_index = 0  # 循环到开头
+            if self.current_word_index >= len(self.lyrics[self.current_line_index]):
+                self.current_line_index += 1
+                update_text_box()
+                self.current_word_index = 0  # 循环到开头
 
-            highlight_char(self.current_index)
+            highlight_char(self.current_word_index)
+
+        def update_text_box():
+            self.textBrowser_pastLyric.setText(self.lyrics[self.current_line_index - 1])
+            if self.current_line_index == len(self.lyrics):
+                func.messaagebox(root, "Finished", "All done. Click OK to start lrc generate.")
+                outcome = func.generate_lrc(self.time_static, self.lyrics, self.delay, self.checkBox_3d.isChecked())
+                self.LRCBrowser.setPlainText(outcome)
+                self.tabWidget.setCurrentIndex(0)
+                return
+            self.textBrowser_nowLyric.setText(self.lyrics[self.current_line_index])
+            if self.current_line_index >= len(self.lyrics) - 1:
+                self.textBrowser_incLyric.setText("")
+            else:
+                self.textBrowser_incLyric.setText(self.lyrics[self.current_line_index + 1])
 
         def update_position():
             now = self.player.position()
@@ -593,7 +538,7 @@ class Ui_root(object):
                 func.messaagebox(root, "Success", "File saved successfully.")
 
         def update_animation():
-            if self.checkBox_no_animation.isChecked():
+            if self.checkBox_no_anitamtion.isChecked():
                 self.player.positionChanged.disconnect(self.ani_connect)
                 self.ani_connect = None
             else:
@@ -640,7 +585,27 @@ class Ui_root(object):
             logger.info("Reset every change")
             prepare_edit()
 
+        def qsave():
+            logger.info("Save the current time stamps")
+            self.qsave_time_static = self.time_static.copy()
+            self.qsave_position = self.player.position()
+            self.qsave_word_index = int(self.current_word_index)
+            self.qsave_line_index = int(self.current_line_index)
+            self.label_showSave.setText("Saved: %s" % self.textBrowser_nowLyric.toPlainText())
+
+        def qload():
+            logger.info("Load the time stamps")
+            self.player.pause()
+            self.player.setPosition(self.qsave_position)
+            self.time_static = self.qsave_time_static.copy()
+            self.current_word_index = self.qsave_word_index
+            self.current_line_index = self.qsave_line_index
+            update_text_box()
+            highlight_char(self.current_word_index)
+            func.messaagebox(root, "Success", "Time stamps loaded successfully.")
+
         self.actionOpen_a_LRC_File.setShortcut(u"Ctrl+O")
+        self.pushButton_Mark.setShortcut(u"M")
         self.actionExit.triggered.connect(root.close)
         self.pushButton_openFile.clicked.connect(choose_file)
         self.pushButton_save.clicked.connect(save_file)
@@ -648,7 +613,7 @@ class Ui_root(object):
         self.commandLinkButton_1.clicked.connect(next_step_01)
         self.pushButton_upon.clicked.connect(update_lyrics)
         self.pushButton_choose_audio.clicked.connect(choose_audio)
-        self.checkBox_no_animation.stateChanged.connect(update_animation)
+        self.checkBox_no_anitamtion.stateChanged.connect(update_animation)
         self.fontComboBox.currentFontChanged.connect(update_font)
         self.doubleSpinBox_speed.valueChanged.connect(update_playback_rate)
         self.DelaySetting.valueChanged.connect(update_delay)
@@ -657,6 +622,8 @@ class Ui_root(object):
         self.pushButton_Pause.clicked.connect(pause)
         self.pushButton_Back.clicked.connect(back_10s)
         self.pushButton_Rec.clicked.connect(rec)
+        self.pushButton_qSave.clicked.connect(qsave)
+        self.pushButton_qLoad.clicked.connect(qload)
         self.ani_connect=self.player.positionChanged.connect(update_position)
 
 
